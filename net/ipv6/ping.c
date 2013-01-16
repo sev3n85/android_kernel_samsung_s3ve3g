@@ -18,7 +18,10 @@
  *
  */
 
+<<<<<<< HEAD
 #include <linux/export.h>
+=======
+>>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
 #include <net/addrconf.h>
 #include <net/ipv6.h>
 #include <net/ip6_route.h>
@@ -26,6 +29,10 @@
 #include <net/udp.h>
 #include <net/transp_v6.h>
 #include <net/ping.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
 
 struct proto pingv6_prot = {
 	.name =		"PINGv6",
@@ -198,7 +205,10 @@ int ping_v6_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	if (hlimit < 0)
 		hlimit = ip6_dst_hoplimit(dst);
 
+<<<<<<< HEAD
 	lock_sock(sk);
+=======
+>>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
 	err = ip6_append_data(sk, ping_getfrag, &pfh, len,
 			      0, hlimit,
 			      np->tclass, NULL, &fl6, rt,
@@ -213,10 +223,15 @@ int ping_v6_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 						 (struct icmp6hdr *) &pfh.icmph,
 						 len);
 	}
+<<<<<<< HEAD
 	release_sock(sk);
 
 	if (err)
 		return err;
 
 	return len;
+=======
+
+	return err;
+>>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
 }

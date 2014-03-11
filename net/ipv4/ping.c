@@ -983,14 +983,20 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		sin6->sin6_port = 0;
 		sin6->sin6_addr = ip6->saddr;
 
+		sin6->sin6_flowinfo = 0;
 		if (np->sndflow)
 			sin6->sin6_flowinfo =
 				*(__be32 *)ip6 & IPV6_FLOWINFO_MASK;
 
+<<<<<<< HEAD
 		if (__ipv6_addr_needs_scope_id(
 		    ipv6_addr_type(&sin6->sin6_addr)))
 			sin6->sin6_scope_id = IP6CB(skb)->iif;
 >>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
+=======
+		sin6->sin6_scope_id = ipv6_iface_scope_id(&sin6->sin6_addr,
+							  IP6CB(skb)->iif);
+>>>>>>> e83fef8... ping: always initialize ->sin6_scope_id and ->sin6_flowinfo
 
 		if (inet6_sk(sk)->rxopt.all)
 			pingv6_ops.datagram_recv_ctl(sk, msg, skb);

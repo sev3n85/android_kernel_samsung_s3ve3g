@@ -830,6 +830,9 @@ This is causing conflict to IRLED driver in Millet Wifi US Open and thus disabli
 =======
 
 		qcom,cpu-dma-latency-us = <701>;
+<<<<<<< HEAD
+>>>>>>> c43c23c... ARM: dts: msm: set cpu_dma_latency to 701 usec
+=======
 >>>>>>> c43c23c... ARM: dts: msm: set cpu_dma_latency to 701 usec
 		qcom,msm-bus,name = "sdcc1";
 		qcom,msm-bus,num-cases = <8>;
@@ -919,6 +922,9 @@ This is causing conflict to IRLED driver in Millet Wifi US Open and thus disabli
 =======
 
 		qcom,cpu-dma-latency-us = <701>;
+<<<<<<< HEAD
+>>>>>>> c43c23c... ARM: dts: msm: set cpu_dma_latency to 701 usec
+=======
 >>>>>>> c43c23c... ARM: dts: msm: set cpu_dma_latency to 701 usec
 		qcom,msm-bus,name = "sdhc2";
 		qcom,msm-bus,num-cases = <8>;

@@ -249,8 +249,13 @@ int ping_init_sock(struct sock *sk)
 	gid_t group = current_egid();
 	gid_t range[2];
 	struct group_info *group_info;
+<<<<<<< HEAD
 	int i, j, count;
 	int ret = 0;
+=======
+	int i, j, count  ;
+        int ret = 0;
+>>>>>>> 314b255... net: ipv4: current group_info should be put after using.
 
 	inet_get_ping_group_range_net(net, range, range+1);
 	if (range[0] <= group && group <= range[1])
@@ -271,6 +276,11 @@ int ping_init_sock(struct sock *sk)
 	}
 	ret = -EACCES;
 
+<<<<<<< HEAD
+=======
+	ret = -EACCES;
+
+>>>>>>> 314b255... net: ipv4: current group_info should be put after using.
 out_release_group:
 	put_group_info(group_info);
 	return ret;

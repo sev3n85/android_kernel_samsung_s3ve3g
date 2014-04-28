@@ -203,8 +203,6 @@ static void cpufreq_interactive_timer_start(int cpu)
 {
 	struct cpufreq_interactive_cpuinfo *pcpu = &per_cpu(cpuinfo, cpu);
 	u64 expires = round_to_nw_start(pcpu->last_evaluated_jiffy);
-	unsigned long expires = jiffies +
-		usecs_to_jiffies(timer_rate);
 	unsigned long flags;
 
 	pcpu->cpu_timer.expires = expires;

@@ -941,19 +941,25 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	if (family == AF_INET) {
 		sin = (struct sockaddr_in *) msg->msg_name;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 537c27c... ping: prevent NULL pointer dereference on write to msg_name
 		if (sin) {
 			sin->sin_family = AF_INET;
 			sin->sin_port = 0 /* skb->h.uh->source */;
 			sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 			memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
 		}
+<<<<<<< HEAD
 =======
 		sin->sin_family = AF_INET;
 		sin->sin_port = 0 /* skb->h.uh->source */;
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 		memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
 >>>>>>> 8945765... net: ipv6: Add IPv6 support to the ping socket.
+=======
+>>>>>>> 537c27c... ping: prevent NULL pointer dereference on write to msg_name
 
 		if (isk->cmsg_flags)
 			ip_cmsg_recv(msg, skb);
@@ -964,7 +970,10 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		struct ipv6hdr *ip6 = ipv6_hdr(skb);
 		sin6 = (struct sockaddr_in6 *) msg->msg_name;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 537c27c... ping: prevent NULL pointer dereference on write to msg_name
 		if (sin6) {
 			sin6->sin6_family = AF_INET6;
 			sin6->sin6_port = 0;
@@ -976,6 +985,7 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 					*(__be32 *)ip6 & IPV6_FLOWINFO_MASK;
 
 			sin6->sin6_scope_id = ipv6_iface_scope_id(&sin6->sin6_addr,
+<<<<<<< HEAD
 					IP6CB(skb)->iif);
 		}
 =======
@@ -997,6 +1007,10 @@ int ping_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		sin6->sin6_scope_id = ipv6_iface_scope_id(&sin6->sin6_addr,
 							  IP6CB(skb)->iif);
 >>>>>>> e83fef8... ping: always initialize ->sin6_scope_id and ->sin6_flowinfo
+=======
+								  IP6CB(skb)->iif);
+		}
+>>>>>>> 537c27c... ping: prevent NULL pointer dereference on write to msg_name
 
 		if (inet6_sk(sk)->rxopt.all)
 			pingv6_ops.datagram_recv_ctl(sk, msg, skb);

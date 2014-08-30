@@ -121,6 +121,13 @@ static int timer_slack_val = DEFAULT_TIMER_SLACK;
 static bool io_is_busy;
 
 /*
+ * Whether to align timer windows across all CPUs. When
+ * use_sched_load is true, this flag is ignored and windows
+ * will always be aligned.
+ */
+static bool align_windows = true;
+
+/*
  * Stay at max freq for at least max_freq_hysteresis before dropping
  * frequency.
  */
@@ -166,9 +173,16 @@ static inline cputime64_t get_cpu_idle_time(unsigned int cpu,
 static u64 round_to_nw_start(u64 jif)
 {
 	unsigned long step = usecs_to_jiffies(timer_rate);
+	u64 ret;
 
-	do_div(jif, step);
-	return (jif + 1) * step;
+	if (align_windows) {
+		do_div(jif, step);
+		ret = (jif + 1) * step;
+	} else {
+		ret = jiffies + usecs_to_jiffies(timer_rate);
+	}
+
+	return ret;
 }
 
 static void cpufreq_interactive_timer_resched(unsigned long cpu)
@@ -1099,6 +1113,28 @@ static ssize_t store_max_freq_hysteresis(struct kobject *kobj,
 static struct global_attr max_freq_hysteresis_attr = __ATTR(max_freq_hysteresis, 0644,
 		show_max_freq_hysteresis, store_max_freq_hysteresis);
 
+static ssize_t show_align_windows(struct kobject *kobj,
+			struct attribute *attr, char *buf)
+{
+	return sprintf(buf, "%u\n", align_windows);
+}
+
+static ssize_t store_align_windows(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
+{
+	int ret;
+	unsigned long val;
+
+	ret = kstrtoul(buf, 0, &val);
+	if (ret < 0)
+		return ret;
+	align_windows = val;
+	return count;
+}
+
+static struct global_attr align_windows_attr = __ATTR(align_windows, 0644,
+		show_align_windows, store_align_windows);
+
 static struct attribute *interactive_attributes[] = {
 	&target_loads_attr.attr,
 	&above_hispeed_delay_attr.attr,
@@ -1112,6 +1148,7 @@ static struct attribute *interactive_attributes[] = {
 	&boostpulse_duration.attr,
 	&io_is_busy_attr.attr,
 	&max_freq_hysteresis.attr,
+	&align_windows.attr,
 	NULL,
 };
 

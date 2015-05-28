@@ -145,7 +145,7 @@ choice
 	config DEFAULT_NOOP
 		bool "No-op"
 
-onfig DEFAULT_BFQ
+        config DEFAULT_BFQ
                 bool "BFQ" if IOSCHED_BFQ=y
 
         config DEFAULT_SIO

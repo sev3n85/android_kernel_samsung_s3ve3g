@@ -1,4 +1,4 @@
-/*
+   /*
  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,16 +21,17 @@
 		qcom,torch-source = <&pm8226_torch>;
 	};
 
-	i2c@f9923000 {
-		compatible = "qcom,i2c-qup";
-		qcom,scl-gpio = <&msmgpio 3 0>;
-		qcom,sda-gpio = <&msmgpio 2 0>;
-		eeprom0: qcom,eeprom@50 {
-			compatible = "qcom,msm_eeprom";
-			reg = <0x50 0x0>;
+	spi@f9923000 {
+		eeprom0: qcom,eeprom@0 {
+			compatible = "qcom,eeprom";
+			reg = <0>;
 			cell-index = <0>;
-			qcom,slave-addr = <0x50>;
-			qcom,eeprom-name = "BRCE064";
+			spi-max-frequency = <50000000>;
+			qcom,eeprom-name = "fidelix";
+			qcom,eeprom-id0 = <0xf8 0x14>;
+			qcom,eeprom-id1 = <0xef 0x13>;
+			qcom,eeprom-id2 = <0xef 0x14>;
+
 			qcom,cal-num-blocks = <8>;
 			qcom,cal-page0 = <0 0x0 0 0x0 0 0>;
 			qcom,cal-poll0 = <0 0x0 0 0x0 0 0>;
@@ -57,12 +58,28 @@
 			qcom,cal-poll7 = <0 0x0 0 0x0 0 0>;
 			qcom,cal-mem7 = <4 0x3FFC 3 0 1 0>;
 
-			cam_vio-supply = <&pm8226_l27>;
 			qcom,cam-vreg-name = "cam_vio";
 			qcom,cam-vreg-type = <0>;
-			qcom,cam-vreg-min-voltage = <1800000>;
-			qcom,cam-vreg-max-voltage = <1800000>;
 			qcom,cam-vreg-op-mode = <1800000>;
+			qcom,cam-power-seq-type = "sensor_gpio";
+			qcom,cam-power-seq-val = "sensor_gpio_ext_camio_en";
+			qcom,cam-power-seq-cfg-val = <1>;
+			qcom,cam-power-seq-delay = <2>;
+			gpios = <&msmgpio 114 0>;
+			qcom,gpio-ext-camio-en = <0>;
+			qcom,gpio-req-tbl-num = <0>;
+			qcom,gpio-req-tbl-flags = <0>;
+			qcom,gpio-req-tbl-label = "CAM_IO_EN";
+			qcom,spiop-read = <0x03 3 0 0 0>;
+			qcom,spiop-readseq = <0x03 3 0 0 0>;
+			qcom,spiop-queryid = <0x90 3 0 0 0>;
+			qcom,spiop-pprog = <0x02 3 0 3 3>;
+			qcom,spiop-wenable = <0x06 0 0 0 0>;
+			qcom,spiop-readst = <0x05 0 0 0 0>;
+			qcom,spiop-erase = <0x20 3 0 10 30>;
+			qcom,spi-busy-mask = <0x01>;
+			qcom,spi-page-size = <256>;
+			qcom,spi-erase-size = <4096>;
 		};
 	};
 
@@ -79,20 +96,21 @@
 		qcom,eeprom-src = <&eeprom0>;
 		qcom,led-flash-src = <&led_flash0>;
 		cam_vdig-supply = <&pm8226_l26>;
-		cam_vio-supply = <&pm8226_l27>;
 		cam_vaf-supply = <&pm8226_l28>;
 		qcom,cam-vreg-name = "cam_vdig", "cam_vio", "cam_vaf";
 		qcom,cam-vreg-type = <0 0 0>;
 		qcom,cam-vreg-op-mode = <1225000 1800000 2800000>;
 		qcom,gpio-no-mux = <0>;
 		gpios = <&msmgpio 26 0>,
-			<&msmgpio 37 0>,
-			<&msmgpio 112 0>;
+				<&msmgpio 37 0>,
+				<&msmgpio 112 0>,
+				<&msmgpio 114 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-ext-vana-power = <2>;
-		qcom,gpio-req-tbl-num = <0 1 2>;
-		qcom,gpio-req-tbl-flags = <1 0 0>;
-		qcom,gpio-req-tbl-label = "CAMIF_MCLK", "CAM_RESET", "CAM_VANA_GPIO";
+		qcom,gpio-ext-camio-en = <3>;
+		qcom,gpio-req-tbl-num = <0 1 2 3>;
+		qcom,gpio-req-tbl-flags = <1 0 0 0>;
+		qcom,gpio-req-tbl-label = "CAMIF_MCLK", "CAM_RESET1", "CAM_VANA_GPIO" , "CAM_IO_EN";
 		qcom,cci-master = <0>;
 		status = "ok";
 	};
@@ -103,21 +121,23 @@
 		reg = <0x2>;
 		qcom,csiphy-sd-index = <1>;
 		qcom,csid-sd-index = <1>;
-		cam_vio-supply = <&pm8226_l27>;
-		qcom,cam-vreg-name = "cam_vdig", "cam_vio";
-		qcom,cam-vreg-type = <1 0>;
-		qcom,cam-vreg-min-voltage = <0 1800000>;
-		qcom,cam-vreg-max-voltage = <0 1800000>;
-		qcom,cam-vreg-op-mode = <0 1800000>;
+		qcom,cam-vreg-name = "cam_vdig", "cam_vana", "cam_vio";
+		qcom,cam-vreg-type = <1 1 0>;
+		qcom,cam-vreg-op-mode = <0 0 1800000>;
 		qcom,gpio-no-mux = <0>;
-		gpios = <&msmgpio 27 0>,
-			<&msmgpio 28 0>,
-			<&msmgpio 112 0>;
+		gpios = <&msmgpio 26 0>,
+				<&msmgpio 28 0>,
+				<&msmgpio 112 0>,
+				<&msmgpio 114 0>;
+		qcom,gpio-req-tbl-num = <0 1 2 3>;
+		qcom,gpio-req-tbl-flags = <1 0 0 0>;
+		qcom,gpio-req-tbl-label = "CAMIF_MCLK",
+					  "CAM_VT_RESET",
+					  "CAM_VANA_GPIO",
+					  "CAM_IO_EN";
 		qcom,gpio-vt-reset = <1>;
 		qcom,gpio-ext-vana-power = <2>;
-		qcom,gpio-req-tbl-num = <0 1 2>;
-		qcom,gpio-req-tbl-flags = <1 0 0>;
-		qcom,gpio-req-tbl-label = "CAMIF_MCLK", "CAM_VT_RESET", "CAM_VANA_GPIO";
+		qcom,gpio-ext-camio-en = <3>;
 		qcom,cci-master = <0>;
 		status = "ok";
 	};

@@ -72,7 +72,7 @@ char *mdss_dsi_buf_init(struct dsi_buf *dp)
 int mdss_dsi_buf_alloc(struct dsi_buf *dp, int size)
 {
 #if defined(CONFIG_MACH_S3VE3G_EUR)
-	dp->start = dma_alloc_writecombine(NULL, size, &dp->dmap, GFP_KERNEL);
+   	dp->start = dma_alloc_writecombine(NULL, size, &dp->dmap, GFP_KERNEL);
 	if (dp->start == NULL) {
 	pr_err("%s:%u\n", __func__, __LINE__);
 	return -ENOMEM;
@@ -87,7 +87,7 @@ int mdss_dsi_buf_alloc(struct dsi_buf *dp, int size)
 	dp->data = dp->start;
 	dp->len = 0;
 	return size; 
-
+	
 #else
 	int off;
 
@@ -649,7 +649,6 @@ void mdss_dsi_set_tear_on(struct mdss_dsi_ctrl_pdata *ctrl)
 	cmdreq.flags = CMD_REQ_COMMIT;
 	cmdreq.rlen = 0;
 	cmdreq.cb = NULL;
-	cmdreq.rbuf = ctrl->rx_buf.data;
 
 	mdss_dsi_cmdlist_put(ctrl, &cmdreq);
 }
@@ -663,7 +662,6 @@ void mdss_dsi_set_tear_off(struct mdss_dsi_ctrl_pdata *ctrl)
 	cmdreq.flags = CMD_REQ_COMMIT;
 	cmdreq.rlen = 0;
 	cmdreq.cb = NULL;
-	cmdreq.rbuf = ctrl->rx_buf.data;
 
 	mdss_dsi_cmdlist_put(ctrl, &cmdreq);
 }

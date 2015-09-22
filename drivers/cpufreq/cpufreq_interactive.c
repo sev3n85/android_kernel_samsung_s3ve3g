@@ -438,7 +438,6 @@ static void cpufreq_interactive_timer(unsigned long data)
 		}
 	} else {
 		new_freq = choose_freq(pcpu, loadadjfreq);
-	}
 
 		if (sync_freq && new_freq < sync_freq) {
 

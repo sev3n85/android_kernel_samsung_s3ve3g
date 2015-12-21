@@ -1126,8 +1126,8 @@ static struct attribute *interactive_attributes[] = {
 	&boostpulse.attr,
 	&boostpulse_duration.attr,
 	&io_is_busy_attr.attr,
-	&max_freq_hysteresis.attr,
-	&align_windows.attr,
+	&max_freq_hysteresis_attr.attr,
+	&align_windows_attr.attr,
 	NULL,
 };
 

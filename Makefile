@@ -192,7 +192,11 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
-ARCH		?= $(SUBARCH)
+ifeq ($(CONFIG_ARM),y)
+	ARCH	:= arm
+else
+	ARCH	?= $(SUBARCH)
+endif
 CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 
 # Architecture as present in compile.h
@@ -289,7 +293,7 @@ export KBUILD_CHECKSRC KBUILD_SRC KBUILD_EXTMOD
 #         cmd_cc_o_c       = $(CC) $(c_flags) -c -o $@ $<
 #
 # If $(quiet) is empty, the whole command will be printed.
-# If it is set to "quiet_", only the short version will be printed. 
+# If it is set to "quiet_", only the short version will be printed.
 # If it is set to "silent_", nothing will be printed at all, since
 # the variable $(silent_cmd_cc_o_c) doesn't exist.
 #
@@ -563,9 +567,9 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
+KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized)
 else
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized)
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile

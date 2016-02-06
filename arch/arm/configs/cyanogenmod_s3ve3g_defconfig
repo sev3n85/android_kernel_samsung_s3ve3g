@@ -3899,7 +3899,7 @@ CONFIG_SEC_DEBUG_DOUBLE_FREE=y
 #
 # PowerManagement Feature
 #
-CONFIG_SEC_PM=y
+# CONFIG_SEC_PM is not set
 # CONFIG_PID_IN_CONTEXTIDR is not set
 
 #
